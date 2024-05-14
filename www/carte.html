@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<!-- Inclusion du JQuery afin de pouvoir gérer AJAX plus aisément. -->
+
+        <meta charset="utf-8">
+        <!-- Nous chargeons les fichiers CDN de Leaflet. Le CSS AVANT le JS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+            crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+            crossorigin=""></script>
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+			// Lorsque le document est chargé, exécuter le script suivant :
+
+			//~ window.open('./simul.php'); // Ouverture dans un nouvel onglet du script PHP générant aléatoirement les coordonées. La page Web peut très bien fonctionner sans.
+			// Est bloqué par défaut par les navigateurs ce qui n'est donc pas une solution pour d'éventuels clients.
+
+			// Objet qui contiendra toutes les nouvelles coordonnees sans doublons d'ID:
+			var coordonnees = {};
+
+			// Fonction à appeler afin de communiquer avec serv.php en AJAX:
+			function server(type) {
+				console.log('Try ...',type);
+				$.ajax({
+					url : 'serv.php', // On cible le script PHP coté serveur.
+					type : 'POST',
+					data : 'type='+type,
+					success : function (outputfromserver){ // Fonction qui est appelée lorsque le serveur répond.
+						console.log('Success ...');
+						console.log(outputfromserver);
+						if (outputfromserver != '0') {
+							coordonnees = {}; // On vide le contenu de l'objet.
+							for (i in outputfromserver) {
+								coordonnees[outputfromserver[i]['hex']] = { // On crée ou on écrase la valeur correspondante à l'ID de l'avion avec les trois coordonnées pour un avion qui nous intéressent :
+									'lat':outputfromserver[i]['lat'],
+									'lon':outputfromserver[i]['lng'],
+									'date':outputfromserver[i]['date']
+								};
+							}
+							initMap(); // On réiniatilise la carte.
+						}
+					},
+					dataType : 'json' // Le type de donnée reçues est en JSON afin de pouvoir les exploiter.
+				});
+			}
+
+			var macarte = null; // Objet au quel on va appliquer les paramètres.
+			
+			var lat = 43.346859; // Latiute et longitude de base.
+			var lon = 3.222114;
+			function initMap() {
+				$('#cont').html('<div id="map" style="height:550px;z-index: 1;"></div>');
+				macarte = L.map('map').setView([lat, lon], zoom); // On applique 
+				L.marker([43.346859, 3.222114]).addTo(macarte); // Coordonées de l'IUT.
+
+				//~ console.log(coordonnees);
+				// On ajoute à l'objet macarte en tant que marqueurs toutes les coordonnées présentes dans l'objet coordonnees.
+				for (i in coordonnees) {
+					L.marker([coordonnees[i]['lat'], coordonnees[i]['lon']]).addTo(macarte);
+				}
+
+				// On ajoute le cercle représentant la portée de l'antenne:
+				L.circle([43.346859, 3.222114], {radius: 250000}).addTo(macarte);
+
+				L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+					attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+					minZoom: 1,
+					maxZoom: 20
+				}).addTo(macarte);
+			}
+
+			// Fonction qui met à jour toutes les 5 secondes les coordonnées sur la carte en appelant à communiquer avec le serveur.
+			function updt() {
+				setTimeout( function (){
+					server(1);
+					updt(); // La fonction s'auto appelle afin d'être exécutée en continu.
+				}, 1000);
+			}
+			server(0); // On veut afficher tout de suite des coordonnées après le chargement de la page, sinon il faudrat attendre 5 secondes afin d'en voir sur la carte.
+			updt(); // Après le chargement de la page, on met en place la mise à jour automatique.
+
+			// Ajout des écouteurs d'évenement.
+			$('#haut').click(function () {lat += deplacement();});
+			$('#bas').click(function () {lat -= deplacement();});
+			$('#gauche').click(function () {lon -= deplacement();});
+			$('#droite').click(function () {lon += deplacement();});
+
+			// Le zoom étant représenté par un nombre de 1 à 20, on l'incrément pour zoomer et on le décrémente pour dézoomer.
+			$('#zoomin').click(function () {zoom++;});
+			$('#zoomout').click(function () {zoom--;});
+
+			// Initialisation du zoom. Référence à 7 :
+			var zoom = 7;
+
+			// Fonction essayant d'avaluer plus ou moins le déplacement à effectuer selon le zoom.
+			function deplacement() {
+				if (zoom < 7) return 45-zoom*5;
+				else if (zoom == 7) return 1;
+				else return 7/(80*(zoom-6));
+			}
+
+			// Mise à jour de la carte lors du clique sur un bouton en appelant le serveur.
+			$('#controle button').click(function () {console.log(deplacement());server(0);});
+
+		});
+		</script>
+		<style type="text/css">
+			/*Style CSS permettant de bien centrer les boutons du milieu (très facultatif) :*/
+			.centercell{display: flex;justify-content: center;}
+		</style>
+		<title>Carte</title>
+	</head>
+	<body>
+		<div id="cont"></div>
+		<div style="display: flex;justify-content: center;z-index: 2; position: absolute; left: 7%; bottom: 7%;">
+			<!-- Table contenant les boutons permettant de contrôler la position :  -->
+			<table id="controle">
+				<tr>
+					<td></td>
+					<td><div class="centercell"><button id="haut">Haut</button></div></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><button id="gauche">Gauche</button></td>
+					<td><div class="centercell">
+						<button id="zoomout">-</button>
+						<button id="zoomin">+</button>
+					</div></td>
+					<td><button id="droite">Droite</button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><div class="centercell"><button id="bas">Bas</button></div></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

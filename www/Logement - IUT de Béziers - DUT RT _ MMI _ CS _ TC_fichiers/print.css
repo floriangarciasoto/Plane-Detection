@@ -1,0 +1,176 @@
+html {
+  width:100%;
+  margin:0;
+  padding:0;
+}
+
+body {
+	margin:0;
+	padding:0;
+	color:#000;
+	background-color:#DEDEDE;
+	text-align:center;
+	font-family:"Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	font-size:0.85em;
+}
+
+#page {
+	text-align:left;
+	margin:10px 8% 10px 8%;
+	position:relative;
+	background:#fff;
+	border:1px solid #CFCFCF;
+	-moz-border-radius:6px;
+	border-radius:6px;
+	padding:0;
+	zoom:1;
+}
+
+#banner {
+	margin:0;
+	padding:0;
+	height:80px;
+	border:none;
+}
+
+h1#top {
+	position:absolute;
+	margin:0;
+	padding:0;
+	text-indent:-5000px;
+	line-height:1px;
+	font-size:1px;
+}
+
+h2 {
+	color:#769712;
+	padding-bottom:2px;
+	padding-left:25px;
+	font:bold 1.4em "Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	border-bottom:1px solid #FFD62F;
+}
+
+h3 {
+	font-weight:bold;
+	color:#E7A800;
+}
+
+a {
+	text-decoration:none;
+	color:#006600;
+}
+
+a:hover {
+	text-decoration:underline;
+}
+
+ul {
+  list-style-type:square;
+}
+
+p {
+  margin:1em 0.5em 0 2em;
+  font-size:0.8em;
+  color:#000;
+}
+
+#contenu {
+  float:left;
+  width:65%;
+  margin:0;
+  padding:0;
+  text-align:left;
+}
+
+#contenu h3 {
+	font-weight:bold;
+	color:#E7A800;
+	margin: 5px 0 3px 20px;
+}
+
+#contenu a {
+  font-weight:bold;
+  text-decoration:underline;
+  color:#006600;
+}
+
+#contenu a:hover {
+  color:#000;
+}
+
+#menuright {
+  float:right;
+  width:30%;
+  margin:0 1% 0 0;
+	color:#777;
+	font:1em "Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	background:#E9E9E9;
+}
+
+#menuright h2 {
+	color:#769712;
+	font:1.1em "Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	font-weight:bold;
+	padding-top:15px;
+	margin-bottom:5px;
+	font-variant:small-caps ;
+	border:none;
+}
+
+#menuright a {
+	color:#777;
+	font:1em "Trebuchet MS", Verdana, "Lucida Grande", Tahoma, Helvetica, Sans-Serif;
+	font-weight:bold;
+}
+#menuright a img {
+	border:none;
+	margin:0 0 1em 1em;
+}
+#menuright ul {
+	list-style-type:none;
+	margin:0 0 1em 1em;
+	padding:0;
+}
+
+img {
+  float:left;
+  margin:1em 1.5em 0.5em 1.5em;
+  padding:8px;
+  background:#fff;
+  border:1px solid #243225;
+}
+
+img.droite {
+  float:right;
+}
+
+#footer a, #footer p, #banner h1 a {
+	text-decoration:none;
+	border:none;
+	color:#AABD71;
+}
+
+#footer a:hover {
+	text-decoration:underline;
+}
+
+#footer img, #banner img {
+	border:none;
+}
+
+#footer {
+	text-align:center;
+	margin:0;
+	padding:0.5em;
+	clear:both;
+	border:none;
+	color:#AABD71;
+	font-weight:bold;
+	font-size:1.1em;
+	line-height:2.3em;
+}
+
+#footer p {
+  margin:0;
+	padding:0;
+}

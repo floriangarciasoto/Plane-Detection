@@ -1,0 +1,11 @@
+#!/bin/bash
+while [ 1 ]
+do
+	if test -f "data.txt"; then
+		cat data.txt | grep -v 2J | grep -v - | grep -v 0.0 | sed 's/ sec//g' | grep -v "          " | grep "     " | sed 's/  / /g' | sed 's/  / /g' | sed 's/  / /g' | sed 's/ /,/g' > coordonnees.txt
+		#rm data.txt
+		cat coordonnees.txt
+		php sendtobdd.php
+	fi
+sleep 1
+done
