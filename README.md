@@ -1,9 +1,9 @@
 # Plane-Detection
 
-- Florian GARCIA
-- Adrien DELMAS
-- Yuhan ZHOU
-- Kidoyo PRINCIA
+GARCIA Florian<br/>
+DELMAS Adrien<br/>
+ZHOU Yunhan<br/>
+PRINCIA Kidoyo
 
 ## Le projet en soi
 
